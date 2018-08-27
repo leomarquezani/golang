@@ -1,7 +1,7 @@
 package service
 
 import(
-	"github.com/gorrila/mux"
+	"github.com/gorilla/mux"
 )
 
 func NewRouter() *mux.Router {
