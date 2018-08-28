@@ -1,6 +1,6 @@
 package service
 
-import(
+import (
 	"github.com/gorilla/mux"
 )
 
@@ -11,8 +11,8 @@ func NewRouter() *mux.Router {
 		router.Methods(route.Method).
 			Path(route.Pattern).
 			Name(route.Name).
-			handler(route.HandlerFunc)
+			Handler(route.HandlerFunc)
 	}
 	return router
-	)
+
 }
