@@ -12,7 +12,7 @@ import (
 
 type IBoltClient interface {
 	OpenBoltDb()
-	//QueryAccount(accountId string) (model.Account, error)
+	QueryAccount(accountId string) (model.Account, error)
 	Seed()
 }
 
@@ -65,5 +65,29 @@ func (bc *BoltClient) seedAccounts() {
 			return err
 		})
 	}
-	fmt.Println("Seeded %s fake Accounts...", total)
+	fmt.Printf("Seeded %v fake Accounts...", total)
+}
+
+func (bc *BoltClient) QueryAccount(accountId string) (model.Account, error) {
+
+	acc := model.Account{}
+
+	err := bc.boltDB.View(func(tx *bolt.Tx) error {
+
+		b := tx.Bucket([]byte("AccountBucket"))
+
+		accountBytes := b.Get([]byte(accountId))
+
+		if accountBytes == nil {
+			return fmt.Errorf("No account found for " + accountId)
+		}
+		json.Unmarshal(accountBytes, &acc)
+
+		return nil
+	})
+
+	if err != nil {
+		return model.Account{}, err
+	}
+	return acc, nil
 }
